@@ -22,5 +22,5 @@ def ssh_command(ip,user,passwd,command):
 
     client.close()
 
-ssh_command("*","*","*","whoami")
+ssh_command("*","*","*","hostname")
 
