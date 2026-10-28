@@ -15,12 +15,11 @@ def ssh_command(ip,user,passwd,command):
     ssh_session = client.get_transport().open_session()
 
     if ssh_session.active:
-        ssh_session.exec_command(command)
+        ssh_session.send(command)
 
         output = ssh_session.recv(1024)
         print(output.decode("utf-8", errors="replace"))
 
     client.close()
 
-ssh_command("*","*","*","hostname")
-
+ssh_command("192.168.193.129","mokht","hello@44","hostname")

