@@ -55,6 +55,5 @@ def ssh_command(ip, user, passwd, command):
                 ssh_session.send(str(e))
         client.close()
 
-ssh_command("192.168.193.1","mokht","hello@44","hostname")
 
 
